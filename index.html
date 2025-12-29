@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <title>2026 九州跨年</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            padding-bottom: 90px; /* 避開底部導航 */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 隱藏捲軸 */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* 卡片風格 */
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 12px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            transition: transform 0.2s;
+        }
+        .card:active { transform: scale(0.99); }
+
+        /* 左側分類色條 */
+        .border-l-transport { border-left: 5px solid #3b82f6; } /* 藍 */
+        .border-l-food { border-left: 5px solid #f97316; }      /* 橘 */
+        .border-l-spot { border-left: 5px solid #10b981; }      /* 綠 */
+        .border-l-shop { border-left: 5px solid #a855f7; }      /* 紫 */
+        .border-l-hotel { border-left: 5px solid #64748b; }     /* 灰 */
+
+        /* 標籤樣式 */
+        .tag-must { background-color: #fee2e2; color: #b91c1c; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid #fecaca; }
+        .code-box { font-family: monospace; background: #f1f5f9; color: #334155; padding: 2px 6px; border-radius: 4px; font-weight: bold; border: 1px solid #cbd5e1; }
+
+        /* 導航按鈕 */
+        .nav-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            background-color: #f3f4f6; color: #4b5563;
+            padding: 8px 16px; border-radius: 20px;
+            font-size: 12px; font-weight: bold;
+            text-decoration: none; margin-top: 10px;
+            width: 100%; border: 1px solid #e5e7eb;
+        }
+        .nav-btn:active { background-color: #e5e7eb; }
+
+        /* 分頁切換 */
+        .tab-content { display: none; animation: fadeIn 0.3s ease-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 日期按鈕 */
+        .date-btn {
+            min-width: 60px; height: 70px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: white; border-radius: 12px; border: 1px solid #e5e7eb;
+            color: #9ca3af; margin-right: 8px; font-size: 12px;
+        }
+        .date-btn.active {
+            background: #111827; color: white; border-color: #111827;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .date-btn span.day { font-size: 18px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <header class="bg-white sticky top-0 z-50 px-5 py-4 shadow-sm border-b border-gray-100">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-lg font-bold text-gray-800">2026 九州跨年 🐰</h1>
+                <p class="text-xs text-gray-500">4人同行・博多/熊本/阿蘇/由布院</p>
+            </div>
+            <div class="text-xs bg-gray-100 px-3 py-1 rounded-full text-gray-600 font-bold" id="weather-badge">
+                🌤️ 8°C
+            </div>
+        </div>
+    </header>
+
+    <main id="tab-itinerary" class="tab-content active px-4 pt-4">
+        <div class="flex overflow-x-auto hide-scrollbar mb-4 pb-1" id="date-scroll">
+            </div>
+
+        <div class="bg-gradient-to-r from-blue-500 to-cyan-400 rounded-xl p-4 text-white mb-4 shadow-md flex items-center justify-between">
+            <div>
+                <div class="text-xs opacity-90 mb-1" id="weather-loc">熊本市 天氣預報</div>
+                <div class="text-sm font-bold" id="weather-desc">晴時多雲・氣溫偏低</div>
+            </div>
+            <i class="fa-solid fa-cloud-sun text-3xl opacity-90"></i>
+        </div>
+
+        <div id="itinerary-list">
+            </div>
+    </main>
+
+    <main id="tab-info" class="tab-content px-4 pt-4 space-y-4">
+        
+        <div class="card p-4 border-l-4 border-green-600 bg-green-50 border-0">
+            <h3 class="font-bold text-green-800 mb-2 flex items-center">
+                <i class="fa-solid fa-ticket mr-2"></i>JR 劃位溝通卡
+            </h3>
+            <p class="text-xs text-green-700 mb-2">請出示此畫面給綠色窗口站務員看：</p>
+            <div class="bg-white p-3 rounded-lg border border-green-200 shadow-sm">
+                <p class="text-sm font-bold text-gray-800 mb-2">大人4名です。<br>「特大荷物スペースつき座席」をお願いします。<br>(スーツケースが 3個 あります)</p>
+                <hr class="border-dashed border-gray-300 my-2">
+                <ul class="text-xs text-gray-600 space-y-1 font-mono">
+                    <li>1. 12/31 博多 ➔ 熊本 (新幹線)</li>
+                    <li>2. 01/01 熊本 ↔ 阿蘇 (あそぼーい)</li>
+                    <li>3. 01/03 熊本 ➔ 博多 (新幹線)</li>
+                    <li>4. 01/04 博多 ↔ 由布院 (ゆふいんの森)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card p-4 border-l-shop">
+            <h3 class="font-bold text-gray-800 mb-3 flex items-center">
+                <i class="fa-solid fa-language mr-2 text-purple-500"></i>車站中英對照
+            </h3>
+            <p class="text-xs text-gray-500 mb-2">自動售票機輸入英文搜尋最快：</p>
+            <div class="overflow-hidden rounded-lg border border-gray-200">
+                <table class="w-full text-sm text-left">
+                    <thead class="bg-gray-100 text-gray-600 font-bold">
+                        <tr>
+                            <th class="p-2">中文</th>
+                            <th class="p-2">英文 (搜尋用)</th>
+                            <th class="p-2">日文</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 bg-white">
+                        <tr><td class="p-2">博多</td><td class="p-2 font-mono font-bold text-blue-600">HAKATA</td><td class="p-2">博多</td></tr>
+                        <tr><td class="p-2">熊本</td><td class="p-2 font-mono font-bold text-blue-600">KUMAMOTO</td><td class="p-2">熊本</td></tr>
+                        <tr><td class="p-2">阿蘇</td><td class="p-2 font-mono font-bold text-blue-600">ASO</td><td class="p-2">阿蘇</td></tr>
+                        <tr><td class="p-2">由布院</td><td class="p-2 font-mono font-bold text-blue-600">YUFUIN</td><td class="p-2">由布院</td></tr>
+                        <tr><td class="p-2">太宰府</td><td class="p-2 font-mono text-gray-500">DAZAIFU</td><td class="p-2">太宰府</td></tr>
+                        <tr><td class="p-2">新鳥棲</td><td class="p-2 font-mono text-gray-500">SHIN-TOSU</td><td class="p-2">新鳥栖</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card p-4 border-l-hotel">
+            <h3 class="font-bold text-gray-800 mb-3"><i class="fa-solid fa-bed mr-2 text-slate-500"></i>住宿資訊</h3>
+            <div class="mb-4 border-b pb-3 border-gray-100">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">12/31 - 01/03</span>
+                    <span class="text-xs text-gray-400">3晚</span>
+                </div>
+                <div class="font-bold text-gray-800">三井花園飯店 熊本</div>
+                <div class="text-xs text-gray-500 mt-1">熊本市中央区紺屋今町1-20</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=三井花園飯店熊本" target="_blank" class="nav-btn mt-2">📍 導航前往</a>
+            </div>
+            <div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">01/03 - 01/06</span>
+                    <span class="text-xs text-gray-400">3晚</span>
+                </div>
+                <div class="font-bold text-gray-800">博多凱富飯店 (Comfort Hotel)</div>
+                <div class="text-xs text-gray-500 mt-1">博多口對面 (Starbucks樓上)</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Comfort+Hotel+Hakata" target="_blank" class="nav-btn mt-2">📍 導航前往</a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+            <div class="card p-3 border-l-transport mb-0">
+                <div class="text-xs text-gray-500 mb-1">去程 CI 110</div>
+                <div class="font-bold text-sm">12/31 09:55 抵達</div>
+                <div class="text-xs text-gray-500 mt-2 mb-1">回程 CI 111</div>
+                <div class="font-bold text-sm">01/06 10:55 起飛</div>
+            </div>
+            <div class="card p-3 border-l-4 border-red-500 bg-red-50 mb-0 flex flex-col justify-center">
+                <a href="tel:110" class="text-red-700 font-bold text-sm block mb-2"><i class="fa-solid fa-phone mr-1"></i>警察 110</a>
+                <a href="tel:119" class="text-red-700 font-bold text-sm block"><i class="fa-solid fa-truck-medical mr-1"></i>救護 119</a>
+            </div>
+        </div>
+    </main>
+
+    <main id="tab-budget" class="tab-content px-4 pt-4">
+        <div class="bg-green-600 rounded-xl p-5 text-white shadow-lg mb-6 text-center">
+            <div class="text-sm opacity-90 mb-2">與旅伴共同編輯</div>
+            <h2 class="text-xl font-bold mb-4">📊 雲端共用記帳表</h2>
+            <a href="https://docs.google.com/spreadsheets" target="_blank" class="inline-block bg-white text-green-700 font-bold py-2 px-6 rounded-full text-sm shadow hover:bg-green-50 transition">
+                <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i>開啟 Google Sheets
+            </a>
+            <p class="text-[10px] mt-3 opacity-70">點擊開啟外部試算表 App</p>
+        </div>
+
+        <div class="card p-4">
+            <h3 class="font-bold text-gray-800 mb-3 border-b pb-2">🧮 簡易隨手記 (存於本機)</h3>
+            <div class="flex gap-2 mb-3">
+                <input type="text" id="expense-name" placeholder="項目" class="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500">
+                <input type="number" id="expense-cost" placeholder="¥" class="w-24 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500">
+            </div>
+            <button onclick="addExpense()" class="w-full bg-slate-800 text-white font-bold py-2 rounded-lg text-sm mb-4">新增一筆</button>
+            <div id="expense-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
+            <div class="mt-4 pt-3 border-t flex justify-between font-bold text-gray-800">
+                <span>總計</span>
+                <span id="expense-total">¥0</span>
+            </div>
+        </div>
+    </main>
+
+    <nav class="fixed bottom-0 w-full bg-white border-t border-gray-200 pb-safe pt-2 px-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+        <div class="flex justify-between max-w-md mx-auto">
+            <button onclick="switchTab('itinerary')" class="nav-item active flex flex-col items-center w-16 p-2 text-gray-400 hover:text-gray-900 transition" id="btn-itinerary">
+                <i class="fa-solid fa-map-location-dot text-xl mb-1"></i>
+                <span class="text-[10px] font-bold">行程</span>
+            </button>
+            <button onclick="switchTab('info')" class="nav-item flex flex-col items-center w-16 p-2 text-gray-400 hover:text-gray-900 transition" id="btn-info">
+                <i class="fa-solid fa-suitcase text-xl mb-1"></i>
+                <span class="text-[10px] font-bold">資訊</span>
+            </button>
+            <button onclick="switchTab('budget')" class="nav-item flex flex-col items-center w-16 p-2 text-gray-400 hover:text-gray-900 transition" id="btn-budget">
+                <i class="fa-solid fa-wallet text-xl mb-1"></i>
+                <span class="text-[10px] font-bold">記帳</span>
+            </button>
+        </div>
+    </nav>
+    <div class="fixed bottom-0 w-full h-[env(safe-area-inset-bottom)] bg-white z-40"></div>
+
+<script>
+    // --- 資料區：7天完整行程 ---
+    const days = [
+        { date: "12/31", week: "三", loc: "熊本", weather: "☁️ 6°C", items: [
+            { time: "10:30", type: "transport", title: "福岡機場 ➔ 博多站", note: "搭計程車 (分2台)。博多站領 JR PASS。", map: "博多駅" },
+            { time: "14:00", type: "transport", title: "前往熊本 (新幹線)", note: "約 40 分鐘。記得用【劃位卡】劃位。", map: "熊本駅" },
+            { time: "15:30", type: "shop", title: "COCOSA 購物 (GU/Uniqlo)", note: "【除夕必買】18:00 打烊，動作要快！", map: "COCOSA 熊本" },
+            { time: "18:30", type: "food", title: "勝烈亭 炸豬排", note: "【必吃】新市街本店。備案：黑亭拉麵。", map: "勝烈亭 新市街本店" }
+        ]},
+        { date: "01/01", week: "四", loc: "阿蘇", weather: "☀️ 2°C", items: [
+            { time: "09:11", type: "transport", title: "阿蘇男孩號 (去程)", note: "全車指定席，親子車廂必拍。", map: "熊本駅" },
+            { time: "11:00", type: "spot", title: "草千里之濱", note: "【絕景】搭計程車上山 (4人約¥3500)。", map: "草千里ヶ浜" },
+            { time: "15:30", type: "spot", title: "阿蘇神社 (初詣)", note: "新年參拜。最近車站 [MIYAJI]。", map: "阿蘇神社" },
+            { time: "17:13", type: "transport", title: "阿蘇男孩號 (回程)", note: "返回熊本市區。", map: "阿蘇駅" }
+        ]},
+        { date: "01/02", week: "五", loc: "熊本", weather: "☁️ 7°C", items: [
+            { time: "09:00", type: "spot", title: "熊本城 開城", note: "新春儀式、武將隊表演。", map: "熊本城" },
+            { time: "10:30", type: "shop", title: "鶴屋百貨 初賣", note: "【福袋】搶購。午餐可吃名代豬排。", map: "鶴屋百貨店" },
+            { time: "14:00", type: "spot", title: "熊本動植物園", note: "搭市電去。看金絲猴。", map: "熊本市動植物園" },
+            { time: "18:00", type: "food", title: "熊本屋台村", note: "球磨燒酎、馬肉料理。氣氛熱鬧。", map: "熊本屋台村" }
+        ]},
+        { date: "01/03", week: "六", loc: "博多", weather: "🌤️ 9°C", items: [
+            { time: "10:00", type: "transport", title: "返回博多 (新幹線)", note: "飯店寄放行李 (博多凱富)。", map: "Comfort Hotel Hakata" },
+            { time: "13:00", type: "spot", title: "太宰府天滿宮", note: "搭西鐵電車。必吃【梅枝餅】。", map: "太宰府天滿宮" },
+            { time: "15:00", type: "spot", title: "福岡動植物園 (備選)", note: "若太宰府人太多改來這。搭計程車。", map: "福岡市動植物園" },
+            { time: "17:00", type: "food", title: "薩摩蒸氣屋", note: "博多站買【現烤甜甜圈】。", map: "博多駅" }
+        ]},
+        { date: "01/04", week: "日", loc: "由布院", weather: "☁️ 5°C", items: [
+            { time: "09:17", type: "transport", title: "由布院之森 (去程)", note: "車上買大豆冰淇淋。", map: "博多駅" },
+            { time: "12:30", type: "spot", title: "金鱗湖 & 湯之坪", note: "史努比茶屋、B-speak 蛋糕捲。", map: "由布院 金鱗湖" },
+            { time: "15:56", type: "transport", title: "由布院之森 (回程)", note: "晚餐推薦：牛腸鍋大山 (KITTE)。", map: "博多駅" }
+        ]},
+        { date: "01/05", week: "一", loc: "福岡", weather: "🌧️ 8°C", items: [
+            { time: "10:00", type: "shop", title: "Bic Camera 天神", note: "【電器】2號館貨全。帶護照退稅。", map: "Bic Camera Tenjin 2nd Block" },
+            { time: "13:00", type: "spot", title: "LaLaport 福岡", note: "【1:1鋼彈】整點表演。午餐美食街。", map: "LaLaport Fukuoka" },
+            { time: "16:00", type: "shop", title: "Yodobashi 博多", note: "最後補貨。飯店就在隔壁。", map: "Yodobashi Camera Hakata" },
+            { time: "19:00", type: "food", title: "和牛神樂 / 今半", note: "最後大餐：和牛壽喜燒。", map: "和牛すきやき 神楽" }
+        ]},
+        { date: "01/06", week: "二", loc: "返程", weather: "✈️", items: [
+            { time: "08:00", type: "transport", title: "前往福岡機場", note: "飯店門口搭計程車直達 (約20分)。", map: "福岡空港国際線ターミナル" },
+            { time: "10:55", type: "transport", title: "華航 CI 111 起飛", note: "Bye Bye Kyushu!", map: "福岡空港" }
+        ]}
+    ];
+
+    let currentDayIdx = 0;
+    let localExpenses = JSON.parse(localStorage.getItem('myTripExpenses')) || [];
+
+    // --- 程式邏輯 ---
+    function init() {
+        renderDateScroll();
+        renderItinerary(0);
+        renderLocalExpenses();
+    }
+
+    function renderDateScroll() {
+        const container = document.getElementById('date-scroll');
+        container.innerHTML = days.map((d, i) => `
+            <div onclick="switchDay(${i})" class="date-btn ${i === 0 ? 'active' : ''}" id="day-btn-${i}">
+                <span class="text-xs">${d.date}</span>
+                <span class="day">${d.week}</span>
+            </div>
+        `).join('');
+    }
+
+    function renderItinerary(idx) {
+        const list = document.getElementById('itinerary-list');
+        const day = days[idx];
+        
+        document.getElementById('weather-badge').innerText = day.weather;
+        document.getElementById('weather-loc').innerText = `${day.loc} 天氣預報`;
+        document.getElementById('weather-desc').innerText = day.weather.includes('☀️') ? '晴朗舒適' : (day.weather.includes('🌧️') ? '記得帶傘' : '多雲陰天');
+
+        list.innerHTML = day.items.map(item => {
+            let borderClass = 'border-l-spot';
+            let icon = 'fa-location-dot';
+            let btnColor = 'bg-emerald-50';
+            let btnText = 'text-emerald-600';
+            
+            if (item.type === 'transport') { borderClass = 'border-l-transport'; icon = 'fa-train-subway'; btnColor = 'bg-blue-50'; btnText = 'text-blue-600'; }
+            if (item.type === 'food') { borderClass = 'border-l-food'; icon = 'fa-utensils'; btnColor = 'bg-orange-50'; btnText = 'text-orange-600'; }
+            if (item.type === 'shop') { borderClass = 'border-l-shop'; icon = 'fa-bag-shopping'; btnColor = 'bg-purple-50'; btnText = 'text-purple-600'; }
+
+            let noteHtml = item.note
+                .replace(/【(.*?)】/g, '<span class="tag-must">$1</span>')
+                .replace(/\[(.*?)\]/g, '<span class="code-box">$1</span>');
+
+            return `
+            <div class="card p-4 ${borderClass}">
+                <div class="flex items-start">
+                    <div class="flex-1">
+                        <div class="text-xs font-bold text-gray-400 mb-1 flex items-center">
+                            <i class="fa-solid ${icon} mr-2"></i>${item.time}
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800">${item.title}</h3>
+                        <div class="text-sm text-gray-600 mt-2 leading-relaxed">${noteHtml}</div>
+                    </div>
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.map)}" target="_blank" class="nav-btn ${btnColor} ${btnText} border-0">
+                    <i class="fa-solid fa-location-arrow mr-2"></i>導航前往
+                </a>
+            </div>`;
+        }).join('');
+    }
+
+    function switchDay(idx) {
+        currentDayIdx = idx;
+        document.querySelectorAll('.date-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(`day-btn-${idx}`).classList.add('active');
+        renderItinerary(idx);
+    }
+
+    window.switchTab = function(tabName) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(el => {
+            el.classList.remove('text-slate-900', 'active');
+            el.classList.add('text-gray-400');
+        });
+        document.getElementById('tab-' + tabName).classList.add('active');
+        const btn = document.getElementById('btn-' + tabName);
+        btn.classList.add('text-slate-900', 'active');
+        btn.classList.remove('text-gray-400');
+    }
+
+    window.addExpense = function() {
+        const name = document.getElementById('expense-name').value;
+        const cost = parseInt(document.getElementById('expense-cost').value);
+        if(!name || !cost) return alert('請輸入項目與金額');
+        localExpenses.push({ name, cost });
+        localStorage.setItem('myTripExpenses', JSON.stringify(localExpenses));
+        renderLocalExpenses();
+        document.getElementById('expense-name').value = '';
+        document.getElementById('expense-cost').value = '';
+    }
+
+    function renderLocalExpenses() {
+        const list = document.getElementById('expense-list');
+        const totalEl = document.getElementById('expense-total');
+        let total = 0;
+        list.innerHTML = localExpenses.map((ex, i) => {
+            total += ex.cost;
+            return `<div class="flex justify-between items-center bg-gray-50 p-2 rounded text-sm">
+                <span>${ex.name}</span>
+                <div class="flex items-center">
+                    <span class="font-bold mr-2">¥${ex.cost}</span>
+                    <button onclick="removeExpense(${i})" class="text-gray-300 hover:text-red-500"><i class="fa-solid fa-xmark"></i></button>
+                </div></div>`;
+        }).join('');
+        totalEl.innerText = `¥${total.toLocaleString()}`;
+    }
+
+    window.removeExpense = function(idx) {
+        localExpenses.splice(idx, 1);
+        localStorage.setItem('myTripExpenses', JSON.stringify(localExpenses));
+        renderLocalExpenses();
+    }
+
+    init();
+</script>
+</body>
+</html>
