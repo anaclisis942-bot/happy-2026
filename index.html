@@ -167,6 +167,50 @@
             </div>
         </div>
 
+        <div class="card p-4 border-l-shop">
+            <h3 class="font-bold text-gray-800 mb-3 flex items-center"><i class="fa-solid fa-gift mr-2 text-purple-500"></i>九州必買伴手禮清單</h3>
+            <div class="space-y-3">
+                <div class="bg-purple-50 p-2 rounded border border-purple-100">
+                    <div class="font-bold text-sm text-purple-800 mb-1">🐻 熊本限定 (Day 3 離開前買)</div>
+                    <ul class="text-xs text-gray-600 list-disc list-inside">
+                        <li><span class="font-bold">譽之陣太鼓</span>：紅豆麻糬餅，代表名產。</li>
+                        <li><span class="font-bold">黑糖多拿滋棒</span>：外脆內軟，適合分送。</li>
+                        <li><span class="font-bold">芥末蓮藕 (真空包)</span>：下酒菜，注意需冷藏。</li>
+                    </ul>
+                </div>
+                <div class="bg-purple-50 p-2 rounded border border-purple-100">
+                    <div class="font-bold text-sm text-purple-800 mb-1">🍜 福岡/博多 (Day 6 爆買)</div>
+                    <ul class="text-xs text-gray-600 list-disc list-inside">
+                        <li><span class="font-bold">博多通饅頭</span>：<span class="text-red-500 font-bold">必買No.1</span>，奶香白豆沙。</li>
+                        <li><span class="font-bold">Menbei (めんべい)</span>：明太子仙貝，硬脆口感。</li>
+                        <li><span class="font-bold">努努雞</span>：<span class="text-red-500">只能當地吃</span>的冰炸雞 (宵夜推)。</li>
+                        <li><span class="font-bold">管狀明太子</span>：像牙膏一樣方便，需保冷。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-4 bg-blue-50 border-l-4 border-blue-500 border-0">
+            <h3 class="font-bold text-blue-800 mb-2 flex items-center"><i class="fa-solid fa-lightbulb mr-2"></i>交通 & 美食隱藏攻略</h3>
+            <div class="space-y-2 text-xs text-blue-900">
+                <div class="border-b border-blue-200 pb-2">
+                    <span class="font-bold block text-sm">🍛 門司港燒咖哩 (Day 4)</span>
+                    <ul class="list-disc list-inside mt-1">
+                        <li><span class="font-bold">Bear Fruits</span>：上戶彩推薦，醬汁濃郁。</li>
+                        <li><span class="font-bold">伽哩本舖</span>：半熟蛋是靈魂。</li>
+                        <li><span class="font-bold">交通</span>：搭 <span class="bg-white px-1 rounded">特急 Sonic</span> 到小倉，轉普通車最快。</li>
+                    </ul>
+                </div>
+                <div class="border-b border-blue-200 pb-2">
+                    <span class="font-bold block text-sm">🚕 4人團體省力密技</span>
+                    <ul class="list-disc list-inside mt-1">
+                        <li><span class="font-bold">太宰府</span>：用 PASS 搭到 [JR二日市]，轉計程車 (約¥2000)。</li>
+                        <li><span class="font-bold">Costco</span>：從博多站搭計程車直達 (約¥4000)。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <div class="card p-4 border-l-food">
             <h3 class="font-bold text-gray-800 mb-3 flex items-center"><i class="fa-solid fa-utensils mr-2 text-orange-500"></i>餐廳實用日語 (指給店員看)</h3>
             <div class="grid grid-cols-2 gap-2">
@@ -336,7 +380,7 @@
               planB: [ // 方案 B 門司港
                   { time: "09:30", type: "hotel", title: "Check-out 退房", note: "拖行李去熊本車站。", map: "Kumamoto Station" },
                   { time: "10:00", type: "transport", title: "返回博多", note: "放完行李後，繼續用 JR PASS 搭特急 Sonic。", map: "Hakata Station" },
-                  { time: "12:30", type: "food", title: "門司港 & 燒咖哩", note: "【JR PASS 免費】懷舊港區。必吃燒咖哩。", map: "Mojiko Station", duration: "特急約 45 分" },
+                  { time: "12:30", type: "food", title: "門司港 & 燒咖哩", note: "【JR PASS 免費】懷舊港區。推薦 Bear Fruits 或 伽哩本舖。", map: "Mojiko Station", duration: "特急約 45 分" },
                   { time: "15:00", type: "spot", title: "小倉城 & 旦過市場", note: "回程停小倉。逛商店街。", map: "Kokura Castle" },
               ],
               common: [
@@ -378,7 +422,6 @@
         ];
 
         let currentDayIdx = 0;
-        // 儲存每天的方案選擇 (預設都是 A)
         let planSelections = { 2: 'A', 3: 'A', 5: 'A' }; // Index 2(Day3), 3(Day4), 5(Day6)
         
         let localExpenses = [];
@@ -413,10 +456,9 @@
                 </div>`).join('');
         }
 
-        // 切換方案函數 (現在需要知道是切換哪一天的)
         window.togglePlan = function(idx, plan) {
             planSelections[idx] = plan;
-            renderItinerary(idx); // 重新渲染該天
+            renderItinerary(idx); 
         }
 
         function renderItinerary(idx) {
@@ -430,19 +472,16 @@
 
             let items = day.items;
             
-            // 處理雙方案邏輯
             if (day.isDualPlan) {
                 switcher.classList.remove('hidden');
                 const currentPlan = planSelections[idx] || 'A';
                 
-                // 更新按鈕文字與狀態
                 const btnA = document.getElementById('btn-plan-A');
                 const btnB = document.getElementById('btn-plan-B');
                 
                 btnA.innerText = day.planNames.A;
                 btnB.innerText = day.planNames.B;
                 
-                // 綁定點擊事件 (使用 Closure 或 onclick 字串)
                 btnA.onclick = function() { togglePlan(idx, 'A'); };
                 btnB.onclick = function() { togglePlan(idx, 'B'); };
 
@@ -480,6 +519,9 @@
                     apm = hour < 12 ? "AM" : "PM";
                 }
 
+                // 修正連結邏輯：直接使用 item.link，不加 google map 前綴
+                const linkButtonHtml = item.link ? `<a href="${item.link}" target="_blank" class="nav-btn reserve-btn mt-2 flex-1 border-0"><i class="fa-solid fa-calendar-check mr-2"></i>訂位/詳情</a>` : '';
+
                 return `
                 <div class="card p-4 ${border}">
                     <div class="flex items-start gap-3">
@@ -495,7 +537,7 @@
                             ${tagsHtml}
                             <div class="flex gap-2">
                                 <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.map)}" target="_blank" class="nav-btn ${color} border-0 mt-2 flex-1"><i class="fa-solid fa-location-arrow mr-2"></i>導航</a>
-                                ${item.link ? `<a href="https://www.google.com/maps/search/?api=1&query=${item.link}" target="_blank" class="nav-btn reserve-btn mt-2 flex-1 border-0"><i class="fa-solid fa-calendar-check mr-2"></i>訂位</a>` : ''}
+                                ${linkButtonHtml}
                             </div>
                         </div>
                     </div>
