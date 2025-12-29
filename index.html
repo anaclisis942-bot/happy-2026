@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap');
         
         body { font-family: 'Noto Sans TC', sans-serif; background-color: #f3f4f6; color: #1f2937; padding-bottom: 90px; -webkit-tap-highlight-color: transparent; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -20,14 +20,16 @@
         .card { background: white; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 12px; overflow: hidden; border: 1px solid #e5e7eb; transition: transform 0.2s; }
         .card:active { transform: scale(0.99); }
 
+        /* 分類色條 */
         .border-l-transport { border-left: 5px solid #3b82f6; }
         .border-l-food { border-left: 5px solid #f97316; }
         .border-l-spot { border-left: 5px solid #10b981; }
         .border-l-shop { border-left: 5px solid #a855f7; }
         .border-l-hotel { border-left: 5px solid #64748b; }
 
-        .tag-must { background-color: #fee2e2; color: #b91c1c; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid #fecaca; }
-        .code-box { font-family: monospace; background: #f1f5f9; color: #334155; padding: 2px 6px; border-radius: 4px; font-weight: bold; border: 1px solid #cbd5e1; }
+        .tag-must { background-color: #fee2e2; color: #b91c1c; padding: 1px 4px; border-radius: 3px; font-size: 10px; font-weight: bold; border: 1px solid #fecaca; display: inline-block; margin-right: 2px;}
+        .tag-time { background-color: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 4px; }
+        .code-box { font-family: monospace; background: #f1f5f9; color: #334155; padding: 1px 4px; border-radius: 3px; font-weight: bold; border: 1px solid #cbd5e1; font-size: 11px; }
 
         .nav-btn { display: inline-flex; align-items: center; justify-content: center; background-color: #f3f4f6; color: #4b5563; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; text-decoration: none; margin-top: 10px; width: 100%; border: 1px solid #e5e7eb; }
         .nav-btn:active { background-color: #e5e7eb; }
@@ -46,7 +48,7 @@
     <header class="bg-white sticky top-0 z-50 px-5 py-4 shadow-sm border-b border-gray-100">
         <div class="flex justify-between items-center">
             <div>
-                <h1 class="text-lg font-bold text-gray-800">2026 九州跨年 🐰</h1>
+                <h1 class="text-xl font-black text-gray-800 tracking-tight">2026 九州跨年 🐰</h1>
                 <p class="text-xs text-gray-500">4人同行・博多/熊本/阿蘇/由布院</p>
             </div>
             <div class="text-xs bg-gray-100 px-3 py-1 rounded-full text-gray-600 font-bold" id="weather-badge">🌤️</div>
@@ -56,7 +58,7 @@
     <main id="tab-itinerary" class="tab-content active px-4 pt-4">
         <div class="flex overflow-x-auto hide-scrollbar mb-4 pb-1" id="date-scroll"></div>
 
-        <div class="bg-gradient-to-r from-blue-500 to-cyan-400 rounded-xl p-4 text-white mb-4 shadow-md flex items-center justify-between">
+        <div class="bg-gradient-to-r from-blue-600 to-cyan-500 rounded-xl p-4 text-white mb-4 shadow-md flex items-center justify-between">
             <div>
                 <div class="text-xs opacity-90 mb-1" id="weather-loc">天氣預報</div>
                 <div class="text-sm font-bold" id="weather-desc">載入中...</div>
@@ -74,97 +76,137 @@
 
     <main id="tab-info" class="tab-content px-4 pt-4 space-y-4">
         
-        <div class="card p-4 border-l-4 border-green-600 bg-green-50 border-0">
-            <h3 class="font-bold text-green-800 mb-2 flex items-center">
-                <i class="fa-solid fa-ticket mr-2"></i>JR 劃位小抄 (備選版)
-            </h3>
-            <p class="text-xs text-green-700 mb-2">大人 4 人 / 行李 3 件 (需特大荷物席)</p>
-            
-            <div class="bg-white p-3 rounded-lg border border-green-200 shadow-sm text-sm">
-                <div class="mb-4 border-b border-dashed pb-2">
-                    <div class="font-bold text-blue-700 mb-1">① 12/31 博多 ➔ 熊本</div>
-                    <p class="text-xs text-gray-500 mb-1">條件：新幹線 / 特大荷物席</p>
-                    <ul class="text-xs font-mono space-y-1 bg-gray-50 p-2 rounded">
-                        <li>1st: 12:54 Sakura 553</li>
-                        <li>2nd: 13:22 Sakura 407</li>
-                        <li>3rd: 13:54 Sakura 557</li>
-                    </ul>
-                </div>
-
-                <div class="mb-4 border-b border-dashed pb-2">
-                    <div class="font-bold text-blue-700 mb-1">② 01/01 熊本 ⇄ 阿蘇</div>
-                    <p class="text-xs text-gray-500 mb-1">車種：阿蘇男孩號 (Aso Boy!) <span class="text-red-500">*全車指定席</span></p>
-                    <div class="grid grid-cols-2 gap-2">
-                        <ul class="text-xs font-mono bg-gray-50 p-2 rounded">
-                            <li class="font-bold underline">去程 (Go)</li>
-                            <li>1st: 09:11 Aso Boy 1</li>
-                            <li class="text-gray-400 mt-1 scale-90 origin-left">若滿席: 搭 09:11 九州橫斷特急 (自由席)</li>
-                        </ul>
-                        <ul class="text-xs font-mono bg-gray-50 p-2 rounded">
-                            <li class="font-bold underline">回程 (Back)</li>
-                            <li>1st: 15:20 Aso Boy 4</li>
-                            <li class="text-gray-400 mt-1 scale-90 origin-left">若滿席: 搭 16:00~17:13 普通電車 (自由席)</li>
-                        </ul>
+        <div class="card p-4 border-l-transport">
+            <h3 class="font-bold text-gray-800 mb-3 flex items-center"><i class="fa-solid fa-plane-departure mr-2 text-blue-500"></i>航班資訊 (China Airlines)</h3>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center border-b border-dashed border-gray-200 pb-2">
+                    <div>
+                        <div class="text-xs text-gray-400">去程 12/31 (三)</div>
+                        <div class="font-bold text-lg text-blue-800">CI 110</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-bold">09:55 抵達</div>
+                        <div class="text-xs text-gray-500">福岡機場 (FUK)</div>
                     </div>
                 </div>
-
-                <div class="mb-4 border-b border-dashed pb-2">
-                    <div class="font-bold text-blue-700 mb-1">③ 01/03 熊本 ➔ 博多</div>
-                    <p class="text-xs text-gray-500 mb-1">條件：新幹線 / 特大荷物席</p>
-                    <ul class="text-xs font-mono space-y-1 bg-gray-50 p-2 rounded">
-                        <li>1st: 10:04 Sakura 548</li>
-                        <li>2nd: 10:35 Sakura 550</li>
-                        <li>3rd: 11:04 Sakura 552</li>
-                    </ul>
-                </div>
-
-                <div class="mb-2">
-                    <div class="font-bold text-blue-700 mb-1">④ 01/04 博多 ⇄ 由布院</div>
-                    <p class="text-xs text-gray-500 mb-1">車種：由布院之森 <span class="text-red-500">*全車指定席</span></p>
-                    <div class="grid grid-cols-2 gap-2">
-                        <ul class="text-xs font-mono bg-gray-50 p-2 rounded">
-                            <li class="font-bold underline">去程 (Go)</li>
-                            <li>1st: 09:17 Yufuin no Mori 1</li>
-                            <li>2nd: 10:11 Yufuin no Mori 3</li>
-                            <li class="text-gray-400 mt-1 scale-90 origin-left">若滿席: 改搭特急 Yufu (自由席)</li>
-                        </ul>
-                        <ul class="text-xs font-mono bg-gray-50 p-2 rounded">
-                            <li class="font-bold underline">回程 (Back)</li>
-                            <li>1st: 15:56 Yufuin no Mori 4</li>
-                            <li>2nd: 17:11 Yufuin no Mori 6</li>
-                            <li class="text-gray-400 mt-1 scale-90 origin-left">若滿席: 改搭特急 Yufu (自由席)</li>
-                        </ul>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <div class="text-xs text-gray-400">回程 01/06 (二)</div>
+                        <div class="font-bold text-lg text-blue-800">CI 111</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-bold">10:55 起飛</div>
+                        <div class="text-xs text-gray-500">建議 08:55 報到</div>
                     </div>
                 </div>
             </div>
+            <a href="https://www.vjw.digital.go.jp/" target="_blank" class="nav-btn bg-blue-600 text-white border-0 mt-3"><i class="fa-solid fa-globe mr-2"></i>Visit Japan Web 入境登錄</a>
+        </div>
+
+        <div class="card p-4 border-l-4 border-green-600 bg-green-50 border-0">
+            <h3 class="font-bold text-green-800 mb-2 flex items-center"><i class="fa-solid fa-ticket mr-2"></i>JR 劃位日文單 (最強版)</h3>
+            <p class="text-xs text-green-700 mb-2">請直接出示此畫面給站務員：</p>
             
-            <div class="mt-2 bg-yellow-50 p-2 rounded border border-yellow-200 text-xs text-gray-700">
-                <p class="font-bold text-red-600 mb-1">⚠️ 站員溝通用 (Staff Note):</p>
-                <p>1. 観光列車が満席の場合、<br>「自由席のある特急」か「普通列車」でお願いします。<br>(If tourist trains are full, Free-seat trains are OK.)</p>
-                <p class="mt-1">2. 新幹線は、時間が前後しても良いので「特大荷物席」を優先してください。<br>(Prioritize Oversized Baggage Seats even if time changes.)</p>
+            <div class="bg-white p-3 rounded-lg border border-green-200 shadow-sm text-sm space-y-2">
+                <div class="bg-yellow-50 p-2 rounded border border-yellow-200">
+                    <p class="font-bold text-gray-800">【基本条件】</p>
+                    <ul class="text-xs text-gray-600 list-disc list-inside mt-1 font-mono">
+                        <li>人数：大人 4名 (Adults x4)</li>
+                        <li>荷物：29吋 2個 (2 Suitcases)</li>
+                        <li class="font-bold text-red-600">座席：席が離れても構いません。<br>(Separated seats are OK!)</li>
+                    </ul>
+                </div>
+
+                <div class="border-b border-dashed pb-2">
+                    <div class="font-bold text-blue-700">① 12/31 博多 ➔ 熊本</div>
+                    <p class="text-xs text-gray-500">特大荷物席 (Baggage Seat) <span class="text-red-500">Required</span></p>
+                    <div class="text-xs font-mono bg-gray-50 p-1 rounded mt-1">
+                        1st: 12:54 Sakura 553<br>
+                        2nd: 13:22 Sakura 407
+                    </div>
+                </div>
+
+                <div class="border-b border-dashed pb-2">
+                    <div class="font-bold text-blue-700">② 1/1 熊本 ⇄ 阿蘇</div>
+                    <p class="text-xs text-gray-500">阿蘇男孩號 (Aso Boy)</p>
+                    <div class="text-xs font-mono bg-gray-50 p-1 rounded mt-1">
+                        Go: 09:11 Aso Boy 1<br>
+                        Back: 15:20 Aso Boy 4<br>
+                        <span class="text-gray-400">*Full? 九州横断特急/普通 (自由席) OK</span>
+                    </div>
+                </div>
+
+                <div class="border-b border-dashed pb-2">
+                    <div class="font-bold text-blue-700">③ 1/3 熊本 ➔ 博多</div>
+                    <p class="text-xs text-gray-500">特大荷物席 (Baggage Seat)</p>
+                    <div class="text-xs font-mono bg-gray-50 p-1 rounded mt-1">
+                        1st: 10:04 Sakura 548<br>
+                        2nd: 10:35 Sakura 550
+                    </div>
+                </div>
+
+                <div>
+                    <div class="font-bold text-blue-700">④ 1/4 博多 ⇄ 由布院</div>
+                    <p class="text-xs text-gray-500">由布院之森 (Yufuin no Mori)</p>
+                    <div class="text-xs font-mono bg-gray-50 p-1 rounded mt-1">
+                        Go: 09:17 No.1 / 10:11 No.3<br>
+                        Back: 15:56 No.4 / 17:11 No.6<br>
+                        <span class="text-gray-400">*Full? 特急 Yufu (自由席) OK</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="card p-4 border-l-shop">
-            <h3 class="font-bold text-gray-800 mb-3"><i class="fa-solid fa-language mr-2 text-purple-500"></i>車站中英對照</h3>
-            <div class="overflow-hidden rounded-lg border border-gray-200">
-                <table class="w-full text-sm text-left">
-                    <thead class="bg-gray-100 font-bold text-gray-600"><tr><th class="p-2">中文</th><th class="p-2">英文 (搜尋用)</th></tr></thead>
-                    <tbody class="divide-y divide-gray-100 bg-white">
-                        <tr><td class="p-2">博多</td><td class="p-2 font-mono font-bold text-blue-600">HAKATA</td></tr>
-                        <tr><td class="p-2">熊本</td><td class="p-2 font-mono font-bold text-blue-600">KUMAMOTO</td></tr>
-                        <tr><td class="p-2">阿蘇</td><td class="p-2 font-mono font-bold text-blue-600">ASO</td></tr>
-                        <tr><td class="p-2">由布院</td><td class="p-2 font-mono font-bold text-blue-600">YUFUIN</td></tr>
-                        <tr><td class="p-2">太宰府</td><td class="p-2 font-mono text-gray-500">DAZAIFU</td></tr>
-                    </tbody>
-                </table>
+        <div class="card p-4 border-l-4 border-gray-600 bg-gray-50 border-0">
+            <h3 class="font-bold text-gray-800 mb-2 flex items-center"><i class="fa-solid fa-robot mr-2"></i>售票機操作攻略</h3>
+            <div class="space-y-2">
+                <div class="bg-white p-2 rounded border border-gray-200">
+                    <div class="font-bold text-xs text-blue-700">Step 1. 領票</div>
+                    <p class="text-[10px] text-gray-500">找 <span class="bg-red-100 text-red-600 px-1 rounded">Passport</span> 標示機器 ➔ 繁體中文 ➔ 領取預訂車票 ➔ 掃 QR Code ➔ 掃 4 本護照</p>
+                </div>
+                <div class="bg-white p-2 rounded border border-gray-200">
+                    <div class="font-bold text-xs text-blue-700">Step 2. 劃位</div>
+                    <p class="text-[10px] text-gray-500">首頁選 <span class="bg-yellow-100 text-yellow-800 px-1 rounded">使用優惠車票預訂指定席</span> ➔ 插 4 張票 ➔ 輸英文站名 ➔ 選 <span class="text-red-500 font-bold">特大荷物</span></p>
+                </div>
             </div>
         </div>
 
         <div class="card p-4 border-l-hotel">
-            <h3 class="font-bold text-gray-800 mb-3"><i class="fa-solid fa-bed mr-2 text-slate-500"></i>住宿資訊</h3>
-            <div class="mb-3 border-b pb-2"><div class="font-bold">三井花園飯店 熊本</div><div class="text-xs text-gray-500">12/31 - 1/3 (3晚)</div></div>
-            <div><div class="font-bold">博多凱富飯店</div><div class="text-xs text-gray-500">1/3 - 1/6 (3晚)</div></div>
+            <h3 class="font-bold text-gray-800 mb-3"><i class="fa-solid fa-bed mr-2 text-slate-500"></i>住宿與電話 (入境用)</h3>
+            <div class="mb-3 border-b pb-2">
+                <div class="font-bold text-sm">三井花園飯店 熊本</div>
+                <div class="text-xs font-mono text-gray-600 select-all">Tel: 096-352-1131</div>
+                <div class="text-xs text-gray-400">12/31 - 1/3 (3晚)</div>
+            </div>
+            <div>
+                <div class="font-bold text-sm">博多凱富飯店</div>
+                <div class="text-xs font-mono text-gray-600 select-all">Tel: 092-431-1211</div>
+                <div class="text-xs text-gray-400">1/3 - 1/6 (3晚)</div>
+            </div>
+        </div>
+
+        <div class="card p-4 bg-yellow-50 border-l-4 border-yellow-400 border-0">
+            <h3 class="font-bold text-yellow-800 mb-2"><i class="fa-solid fa-lightbulb mr-2"></i>溫馨提醒</h3>
+            <ul class="text-xs text-yellow-900 space-y-1 list-disc list-inside">
+                <li><span class="font-bold">現金為王</span>：神社/路邊攤/福袋多收現金。</li>
+                <li><span class="font-bold">垃圾袋</span>：隨身帶塑膠袋，路上無垃圾桶。</li>
+                <li><span class="font-bold">參拜禮儀</span>：二禮、二拍手、一禮。</li>
+                <li><span class="font-bold">防滑</span>：阿蘇/由布院可能有殘雪，小心地滑。</li>
+            </ul>
+        </div>
+
+        <div class="card p-4 bg-red-50 border-l-4 border-red-500 border-0">
+            <h3 class="font-bold text-red-800 mb-2"><i class="fa-solid fa-truck-medical mr-2"></i>緊急聯絡</h3>
+            <div class="text-xs text-red-900 space-y-2">
+                <div>
+                    <span class="font-bold block">台灣駐福岡辦事處 (急難救助)</span>
+                    <a href="tel:09019229740" class="text-lg font-bold underline">090-1922-9740</a>
+                </div>
+                <div class="flex gap-4">
+                    <a href="tel:110" class="font-bold">👮 警察 110</a>
+                    <a href="tel:119" class="font-bold">🚑 救護 119</a>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -207,10 +249,11 @@
 
 <script>
     // --- 完整行程資料 (Day 1-7) ---
+    // duration: 交通預估時間 (分鐘/描述)
     const days = [
         { date: "12/31", week: "三", loc: "熊本", weather: "☁️ 6°C", items: [
-            { time: "10:30", type: "transport", title: "機場 ➔ 博多站", note: "搭計程車 (分2台)。直衝綠色窗口領 PASS。", map: "博多駅" },
-            { time: "12:54", type: "transport", title: "新幹線 Sakura 553", note: "【目標班次】13:33 抵達熊本。若趕不上改搭 13:22。", map: "博多駅" },
+            { time: "10:30", type: "transport", title: "機場 ➔ 博多站", note: "搭計程車 (分2台)。直衝綠色窗口領 PASS。", map: "博多駅", duration: "車程約 20 分" },
+            { time: "12:54", type: "transport", title: "新幹線 Sakura 553", note: "【目標班次】13:33 抵達熊本。記得買便當上車吃。", map: "博多駅", duration: "車程約 40 分" },
             { time: "14:30", type: "shop", title: "Check-in & 水果採買", note: "先去【Food Way】或【COCOSA B1】買草莓放飯店。", map: "Food Way Sakura Machi" },
             { time: "15:30", type: "shop", title: "COCOSA (GU/Uniqlo)", note: "【除夕必買】18:00 打烊。買完放回飯店。", map: "COCOSA Kumamoto" },
             { time: "18:30", type: "food", title: "勝烈亭 炸豬排", note: "跨年大餐。備案：黑亭拉麵。", map: "勝烈亭 新市街本店" },
@@ -218,46 +261,46 @@
             { time: "Late", type: "spot", title: "加藤神社 (初詣)", note: "就在飯店旁。感受日本跨年敲鐘。", map: "Kato Shrine" }
         ]},
         { date: "01/01", week: "四", loc: "阿蘇", weather: "☀️ 2°C", items: [
-            { time: "09:11", type: "transport", title: "阿蘇男孩號 (去程)", note: "全車指定席。車上買布丁。", map: "熊本駅" },
-            { time: "11:00", type: "spot", title: "草千里之濱", note: "【絕景】搭計程車上山 (4人約¥3500)。", map: "草千里ヶ浜" },
+            { time: "09:11", type: "transport", title: "阿蘇男孩號 (去程)", note: "全車指定席。車上買布丁。", map: "熊本駅", duration: "車程 1h 20m" },
+            { time: "11:00", type: "spot", title: "草千里之濱", note: "【絕景】搭計程車上山 (4人約¥3500)。", map: "草千里ヶ浜", duration: "計程車 20 分" },
             { time: "15:30", type: "spot", title: "阿蘇神社 (初詣)", note: "新年參拜。最近車站 [MIYAJI]。", map: "阿蘇神社" },
-            { time: "17:13", type: "transport", title: "阿蘇男孩號 (回程)", note: "返回熊本市區覓食。", map: "阿蘇駅" }
+            { time: "17:13", type: "transport", title: "阿蘇男孩號 (回程)", note: "返回熊本市區覓食。", map: "阿蘇駅", duration: "車程 1h 20m" }
         ]},
         { date: "01/02", week: "五", loc: "熊本", weather: "☁️ 7°C", isDualPlan: true, 
           planA: [ // 方案 A
             { time: "09:00", type: "spot", title: "熊本城 開城", note: "新春儀式、武將隊表演。", map: "熊本城" },
             { time: "10:30", type: "shop", title: "鶴屋百貨 (搶福袋)", note: "【方案A】直衝 B1/1F 買甜點福袋。午餐吃名代豬排。", map: "鶴屋百貨店" },
-            { time: "14:00", type: "spot", title: "熊本動植物園", note: "搭市電去。看金絲猴。", map: "熊本市動植物園" }
+            { time: "14:00", type: "spot", title: "熊本動植物園", note: "搭市電去。看金絲猴。", map: "熊本市動植物園", duration: "市電約 25 分" }
           ],
           planB: [ // 方案 B
             { time: "09:00", type: "spot", title: "熊本城 & 加藤神社", note: "避開人潮，輕鬆散步。", map: "熊本城" },
-            { time: "10:30", type: "spot", title: "水前寺成趣園", note: "【方案B】最美日式庭園。喝抹茶。", map: "Suizenji Jojuen Garden" },
-            { time: "14:00", type: "spot", title: "熊本動植物園", note: "從水前寺搭電車過去很順路。", map: "熊本市動植物園" }
+            { time: "10:30", type: "spot", title: "水前寺成趣園", note: "【方案B】最美日式庭園。喝抹茶。", map: "Suizenji Jojuen Garden", duration: "市電約 20 分" },
+            { time: "14:00", type: "spot", title: "熊本動植物園", note: "從水前寺搭電車過去很順路。", map: "熊本市動植物園", duration: "市電約 5 分" }
           ],
           common: [
             { time: "18:00", type: "food", title: "熊本屋台村", note: "球磨燒酎、馬肉料理。氣氛熱鬧。", map: "熊本屋台村" }
           ]
         },
         { date: "01/03", week: "六", loc: "博多", weather: "🌤️ 9°C", items: [
-            { time: "10:00", type: "transport", title: "返回博多", note: "搭新幹線。先去【博多凱富】寄放行李。", map: "Comfort Hotel Hakata" },
-            { time: "13:00", type: "spot", title: "太宰府天滿宮", note: "人潮預警！必吃【梅枝餅】。", map: "太宰府天滿宮" },
+            { time: "10:00", type: "transport", title: "返回博多", note: "搭新幹線。先去【博多凱富】寄放行李。", map: "Comfort Hotel Hakata", duration: "車程約 40 分" },
+            { time: "13:00", type: "spot", title: "太宰府天滿宮", note: "人潮預警！必吃【梅枝餅】。", map: "太宰府天滿宮", duration: "交通約 50 分" },
             { time: "15:00", type: "spot", title: "備案：福岡動植物園", note: "若太宰府擠不進去，改來這。", map: "福岡市動植物園" },
             { time: "17:00", type: "food", title: "薩摩蒸氣屋", note: "博多站買【現烤甜甜圈】。", map: "博多駅" }
         ]},
         { date: "01/04", week: "日", loc: "由布院", weather: "☁️ 5°C", items: [
-            { time: "09:17", type: "transport", title: "由布院之森", note: "夢幻觀光列車。車上吃B-speak。", map: "博多駅" },
-            { time: "11:45", type: "spot", title: "狹霧台 (計程車)", note: "【秘境】搭計程車上山看全景 (15分)。", map: "Sagiridai Observatory" },
+            { time: "09:17", type: "transport", title: "由布院之森", note: "夢幻觀光列車。車上吃B-speak。", map: "博多駅", duration: "車程 2h 15m" },
+            { time: "11:45", type: "spot", title: "狹霧台 (計程車)", note: "【秘境】搭計程車上山看全景 (15分)。", map: "Sagiridai Observatory", duration: "計程車 15 分" },
             { time: "12:30", type: "spot", title: "金鱗湖 & 湯之坪", note: "Miffy麵包、Milch起司蛋糕、Floral Village。", map: "由布院 金鱗湖" },
             { time: "18:30", type: "food", title: "牛腸鍋 大山 (KITTE)", note: "【晚餐】博多必吃味噌牛腸鍋。", map: "Hakata Motsunabe Oyama KITTE" }
         ]},
         { date: "01/05", week: "一", loc: "福岡", weather: "🌧️ 8°C", items: [
             { time: "10:00", type: "shop", title: "Bic Camera 天神", note: "【電器】2號館貨全。帶護照退稅。", map: "Bic Camera Tenjin 2nd Block" },
-            { time: "13:00", type: "spot", title: "LaLaport 福岡", note: "【1:1鋼彈】整點表演。午餐美食街。", map: "LaLaport Fukuoka" },
+            { time: "13:00", type: "spot", title: "LaLaport 福岡", note: "【1:1鋼彈】整點表演。午餐美食街。", map: "LaLaport Fukuoka", duration: "計程車 20 分" },
             { time: "16:00", type: "shop", title: "Yodobashi 博多", note: "最後補貨。飯店就在隔壁。", map: "Yodobashi Camera Hakata" },
             { time: "19:00", type: "food", title: "和牛神樂 / 今半", note: "最後大餐：和牛壽喜燒。", map: "和牛すきやき 神楽" }
         ]},
         { date: "01/06", week: "二", loc: "返程", weather: "✈️", items: [
-            { time: "08:00", type: "transport", title: "前往福岡機場", note: "飯店門口搭計程車直達 (約20分)。", map: "福岡空港国際線ターミナル" },
+            { time: "08:00", type: "transport", title: "前往福岡機場", note: "飯店門口搭計程車直達。", map: "福岡空港国際線ターミナル", duration: "計程車 15 分" },
             { time: "10:55", type: "transport", title: "華航 CI 111 起飛", note: "Bye Bye Kyushu!", map: "福岡空港" }
         ]}
     ];
@@ -326,14 +369,30 @@
             if(item.type==='shop'){ border='border-l-shop'; icon='fa-bag-shopping'; color='bg-purple-50 text-purple-600'; }
             
             const note = item.note.replace(/【(.*?)】/g, '<span class="tag-must">$1</span>').replace(/\[(.*?)\]/g, '<span class="code-box">$1</span>');
+            const durationHtml = item.duration ? `<div class="tag-time"><i class="fa-regular fa-clock mr-1"></i>${item.duration}</div>` : '';
+            
+            // 判斷是否為上午/下午 (簡單邏輯)
+            let timeStr = item.time;
+            let apm = "";
+            if(item.time.match(/\d{2}:\d{2}/)) {
+                let hour = parseInt(item.time.split(':')[0]);
+                apm = hour < 12 ? "AM" : "PM";
+            }
+
             return `
             <div class="card p-4 ${border}">
-                <div class="flex-1">
-                    <div class="text-xs font-bold text-gray-400 mb-1"><i class="fa-solid ${icon} mr-2"></i>${item.time}</div>
-                    <h3 class="text-lg font-bold text-gray-800">${item.title}</h3>
-                    <div class="text-sm text-gray-600 mt-2 leading-relaxed">${note}</div>
+                <div class="flex items-start gap-4">
+                    <div class="flex flex-col items-center w-14 pt-1 flex-shrink-0">
+                        <span class="text-2xl font-black text-gray-800 leading-none tracking-tighter">${item.time}</span>
+                        <span class="text-[10px] font-bold text-gray-400 mt-0.5">${apm}</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-lg font-bold text-gray-800 leading-tight mb-1">${item.title}</h3>
+                        ${durationHtml}
+                        <div class="text-sm text-gray-600 mt-1 leading-relaxed">${note}</div>
+                        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.map)}" target="_blank" class="nav-btn ${color} border-0 mt-2"><i class="fa-solid fa-location-arrow mr-2"></i>導航</a>
+                    </div>
                 </div>
-                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.map)}" target="_blank" class="nav-btn ${color} border-0"><i class="fa-solid fa-location-arrow mr-2"></i>導航</a>
             </div>`;
         }).join('');
     }
