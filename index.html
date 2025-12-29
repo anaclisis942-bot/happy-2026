@@ -184,7 +184,7 @@
                         <li><span class="font-bold">博多通饅頭</span>：<span class="text-red-500 font-bold">必買No.1</span>，奶香白豆沙。</li>
                         <li><span class="font-bold">Menbei (めんべい)</span>：明太子仙貝，硬脆口感。</li>
                         <li><span class="font-bold">努努雞</span>：<span class="text-red-500">只能當地吃</span>的冰炸雞 (宵夜推)。</li>
-                        <li><span class="font-bold">管狀明太子</span>：像牙膏一樣方便，需保冷。</li>
+                        <li><span class="font-bold">管狀明太子</span>：方便食用，需保冷，最後買。</li>
                     </ul>
                 </div>
             </div>
@@ -194,20 +194,29 @@
             <h3 class="font-bold text-blue-800 mb-2 flex items-center"><i class="fa-solid fa-lightbulb mr-2"></i>交通 & 美食隱藏攻略</h3>
             <div class="space-y-2 text-xs text-blue-900">
                 <div class="border-b border-blue-200 pb-2">
-                    <span class="font-bold block text-sm">🍛 門司港燒咖哩 (Day 4)</span>
+                    <span class="font-bold block text-sm">🍛 門司港燒咖哩 (Day 4 方案B)</span>
                     <ul class="list-disc list-inside mt-1">
-                        <li><span class="font-bold">Bear Fruits</span>：上戶彩推薦，醬汁濃郁。</li>
-                        <li><span class="font-bold">伽哩本舖</span>：半熟蛋是靈魂。</li>
-                        <li><span class="font-bold">交通</span>：搭 <span class="bg-white px-1 rounded">特急 Sonic</span> 到小倉，轉普通車最快。</li>
+                        <li><span class="font-bold">推薦店</span>：Bear Fruits (上戶彩愛店)、伽哩本舖 (半熟蛋)。</li>
+                        <li><span class="font-bold">交通</span>：用 PASS 搭【特急 Sonic】到小倉，轉普通車最快。</li>
                     </ul>
                 </div>
                 <div class="border-b border-blue-200 pb-2">
                     <span class="font-bold block text-sm">🚕 4人團體省力密技</span>
                     <ul class="list-disc list-inside mt-1">
-                        <li><span class="font-bold">太宰府</span>：用 PASS 搭到 [JR二日市]，轉計程車 (約¥2000)。</li>
-                        <li><span class="font-bold">Costco</span>：從博多站搭計程車直達 (約¥4000)。</li>
+                        <li><span class="font-bold">太宰府</span>：JR博多 ➔ [JR二日市] 換計程車 (約¥2000)。</li>
+                        <li><span class="font-bold">Costco</span>：從博多/天神搭計程車直達 (約¥4000)。</li>
                     </ul>
                 </div>
+            </div>
+        </div>
+
+        <div class="card p-4 bg-gray-100 border-l-4 border-gray-500 border-0">
+            <h3 class="font-bold text-gray-800 mb-2 flex items-center"><i class="fa-solid fa-umbrella mr-2"></i>☔ 雨天救援 & 室內備案</h3>
+            <div class="space-y-2 text-xs text-gray-700">
+                <div><span class="font-bold">[Day 2 阿蘇] 阿蘇火山博物館</span><br>交通：計程車 (約 25 分)。躲避風雨大霧。</div>
+                <div><span class="font-bold">[Day 3 熊本] 下通/上通商店街</span><br>交通：市電 [通町筋] 下車 (約 20 分)。全日本最寬有頂拱廊。</div>
+                <div><span class="font-bold">[Day 4 福岡] 海之中道水族館</span><br>交通：JR [海之中道站] (約 45 分)。看海豚秀療癒。</div>
+                <div><span class="font-bold">[Day 5 由布院] COMICO 藝術博物館</span><br>交通：徒步或計程車 (3 分)。隈研吾設計黑杉木建築。</div>
             </div>
         </div>
 
@@ -519,7 +528,6 @@
                     apm = hour < 12 ? "AM" : "PM";
                 }
 
-                // 修正連結邏輯：直接使用 item.link，不加 google map 前綴
                 const linkButtonHtml = item.link ? `<a href="${item.link}" target="_blank" class="nav-btn reserve-btn mt-2 flex-1 border-0"><i class="fa-solid fa-calendar-check mr-2"></i>訂位/詳情</a>` : '';
 
                 return `
