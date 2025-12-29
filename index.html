@@ -78,8 +78,8 @@
         </div>
 
         <div id="plan-switcher" class="hidden mb-4 bg-white p-1 rounded-lg border border-orange-200 flex shadow-sm">
-            <button onclick="togglePlan('A')" id="btn-plan-A" class="flex-1 py-2 rounded-md text-xs font-bold transition-all bg-orange-600 text-white shadow">方案 A：熱血福袋</button>
-            <button onclick="togglePlan('B')" id="btn-plan-B" class="flex-1 py-2 rounded-md text-xs font-bold text-gray-500 transition-all">方案 B：悠閒庭園</button>
+            <button id="btn-plan-A" class="flex-1 py-2 rounded-md text-xs font-bold transition-all bg-orange-600 text-white shadow">方案 A</button>
+            <button id="btn-plan-B" class="flex-1 py-2 rounded-md text-xs font-bold text-gray-500 transition-all">方案 B</button>
         </div>
 
         <div id="itinerary-list"></div>
@@ -186,9 +186,13 @@
                     <div class="text-lg font-black text-gray-800">トイレ🚾</div>
                     <div class="text-xs text-gray-500">洗手間在哪</div>
                 </div>
-                <div class="bg-orange-50 p-2 rounded border border-orange-100 text-center col-span-2">
+                <div class="bg-orange-50 p-2 rounded border border-orange-100 text-center">
+                    <div class="text-lg font-black text-gray-800">葱抜きで</div>
+                    <div class="text-xs text-gray-500">不要加蔥</div>
+                </div>
+                <div class="bg-orange-50 p-2 rounded border border-orange-100 text-center">
                     <div class="text-lg font-black text-gray-800">別々で払えますか？</div>
-                    <div class="text-xs text-gray-500">可以分開付嗎？ (Go Dutch)</div>
+                    <div class="text-xs text-gray-500">可以分開付嗎？</div>
                 </div>
             </div>
         </div>
@@ -282,10 +286,12 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // --- 完整行程資料 (Day 1-7) ---
+        // 包含多日雙方案 Day 3, 4, 6
         const days = [
             { date: "12/31", week: "三", loc: "熊本", weather: "☁️ 6°C", items: [
                 { time: "10:30", type: "transport", title: "機場 ➔ 博多站", note: "搭計程車 (分2台)。直衝綠色窗口領 PASS。", map: "博多駅", duration: "車程約 20 分" },
                 { time: "12:54", type: "transport", title: "新幹線 Sakura 553", note: "【目標班次】13:33 抵達熊本。記得買便當上車吃。", map: "博多駅", duration: "車程約 40 分" },
+                { time: "14:15", type: "transport", title: "移動至飯店", note: "市電A(紅線): 熊本駅前(3) ➔ 辛島町(8)", map: "辛島町", duration: "市電約 12 分" },
                 { time: "14:30", type: "shop", title: "Check-in & 水果採買", note: "先去【Food Way】或【COCOSA B1】買草莓放飯店。", map: "Food Way Sakura Machi", tags: ["熊本草莓", "蜜柑"] },
                 { time: "15:30", type: "shop", title: "COCOSA (GU/Uniqlo)", note: "【除夕必買】18:00 打烊。HEATTECH發熱衣。", map: "COCOSA Kumamoto" },
                 { time: "18:30", type: "food", title: "勝烈亭 炸豬排", note: "跨年大餐。人氣名店，現場抽號碼。", map: "勝烈亭 新市街本店", link: "https://tabelog.com/kumamoto/A4301/A430101/43000028/" },
@@ -302,31 +308,43 @@
                 { time: "19:30", type: "hotel", title: "返回飯店休息", note: "結束充實的一天。", map: "Mitsui Garden Hotel Kumamoto" }
             ]},
             { date: "01/02", week: "五", loc: "熊本", weather: "☁️ 7°C", isDualPlan: true, 
+              planNames: { A: "方案 A：熱血福袋", B: "方案 B：悠閒庭園" },
               planA: [ // 方案 A
                 { time: "09:00", type: "spot", title: "熊本城 開城", note: "新春儀式、武將隊表演。", map: "熊本城" },
                 { time: "10:30", type: "shop", title: "鶴屋百貨 (搶福袋)", note: "【方案A】直衝 B1/1F 買甜點福袋。午餐吃名代豬排。", map: "鶴屋百貨店" },
-                { time: "14:00", type: "spot", title: "熊本動植物園", note: "搭市電去。看金絲猴。", map: "熊本市動植物園", duration: "市電約 25 分" }
+                { time: "14:00", type: "spot", title: "熊本動植物園", note: "從水道町(12) ➔ 動植物園入口(23)", map: "熊本市動植物園", duration: "市電約 25 分" }
               ],
               planB: [ // 方案 B
                 { time: "08:45", type: "hotel", title: "飯店出發", note: "散步去熊本城。", map: "" },
                 { time: "09:00", type: "spot", title: "熊本城 & 加藤神社", note: "避開人潮，輕鬆散步。", map: "熊本城" },
-                { time: "10:30", type: "spot", title: "水前寺成趣園", note: "【方案B】最美日式庭園。喝抹茶。", map: "Suizenji Jojuen Garden", duration: "市電約 20 分" },
-                { time: "14:00", type: "spot", title: "熊本動植物園", note: "從水前寺搭電車過去很順路。", map: "熊本市動植物園", duration: "市電約 5 分" }
+                { time: "10:30", type: "spot", title: "水前寺成趣園", note: "【方案B】市役所前(10) ➔ 水前寺公園(18)。", map: "Suizenji Jojuen Garden", duration: "市電約 18 分" },
+                { time: "14:00", type: "spot", title: "熊本動植物園", note: "往健軍町方向搭 5 站即達。", map: "熊本市動植物園", duration: "市電約 6 分" }
               ],
               common: [
-                { time: "18:00", type: "food", title: "熊本屋台村", note: "球磨燒酎、馬肉料理。氣氛熱鬧。", map: "熊本屋台村" },
+                { time: "18:00", type: "food", title: "熊本屋台村", note: "回程市電至 通町筋(11)。氣氛熱鬧。", map: "熊本屋台村" },
                 { time: "20:30", type: "hotel", title: "返回飯店休息", note: "整理行李，明天要移動了。", map: "Mitsui Garden Hotel Kumamoto" }
               ]
             },
-            { date: "01/03", week: "六", loc: "博多", weather: "🌤️ 9°C", items: [
-                { time: "09:30", type: "hotel", title: "Check-out 退房", note: "拖行李去熊本車站。", map: "Kumamoto Station" },
-                { time: "10:00", type: "transport", title: "返回博多", note: "搭新幹線。先去【博多凱富】寄放行李。", map: "Comfort Hotel Hakata", duration: "車程約 40 分" },
-                { time: "13:00", type: "spot", title: "太宰府天滿宮", note: "人潮預警！必吃【梅枝餅】。看隈研吾星巴克。", map: "太宰府天滿宮", duration: "交通約 50 分" },
-                { time: "16:30", type: "spot", title: "櫛田神社", note: "博多總鎮守，看巨大山笠神轎。", map: "Kushida Shrine" },
-                { time: "18:00", type: "food", title: "博多雞皮 (川屋/大臣)", note: "【博多名物】外酥內Q雞皮串。", map: "Hakata Kawaya", link: "https://tabelog.com/fukuoka/A4001/A400101/40005085/" },
-                { time: "19:30", type: "shop", title: "博多運河城", note: "看噴水秀、Uniqlo旗艦店。", map: "Canal City Hakata" },
-                { time: "21:00", type: "hotel", title: "Check-in 博多凱富", note: "正式入住。", map: "Comfort Hotel Hakata" }
-            ]},
+            { date: "01/03", week: "六", loc: "博多", weather: "🌤️ 9°C", isDualPlan: true,
+              planNames: { A: "方案 A：太宰府祈福", B: "方案 B：門司港 (JR)" },
+              planA: [ // 方案 A 太宰府
+                  { time: "09:30", type: "hotel", title: "Check-out 退房", note: "拖行李去熊本車站。", map: "Kumamoto Station" },
+                  { time: "10:00", type: "transport", title: "返回博多", note: "搭新幹線。先去【博多凱富】寄放行李。", map: "Comfort Hotel Hakata", duration: "車程約 40 分" },
+                  { time: "13:00", type: "spot", title: "太宰府天滿宮", note: "JR博多 ➔ JR二日市 (換計程車) ➔ 太宰府。避開人潮。", map: "太宰府天滿宮", duration: "全程約 50 分" },
+                  { time: "16:30", type: "spot", title: "隈研吾星巴克", note: "表參道必拍建築。", map: "Starbucks Coffee Dazaifu Tenmangu Omotesando" },
+              ],
+              planB: [ // 方案 B 門司港
+                  { time: "09:30", type: "hotel", title: "Check-out 退房", note: "拖行李去熊本車站。", map: "Kumamoto Station" },
+                  { time: "10:00", type: "transport", title: "返回博多", note: "放完行李後，繼續用 JR PASS 搭特急 Sonic。", map: "Hakata Station" },
+                  { time: "12:30", type: "food", title: "門司港 & 燒咖哩", note: "【JR PASS 免費】懷舊港區。必吃燒咖哩。", map: "Mojiko Station", duration: "特急約 45 分" },
+                  { time: "15:00", type: "spot", title: "小倉城 & 旦過市場", note: "回程停小倉。逛商店街。", map: "Kokura Castle" },
+              ],
+              common: [
+                  { time: "18:00", type: "food", title: "博多雞皮 (川屋/大臣)", note: "【博多名物】外酥內Q雞皮串。", map: "Hakata Kawaya", link: "https://tabelog.com/fukuoka/A4001/A400101/40005085/" },
+                  { time: "19:30", type: "shop", title: "博多運河城 / 櫛田神社", note: "看噴水秀、Uniqlo旗艦店。", map: "Canal City Hakata" },
+                  { time: "21:00", type: "hotel", title: "Check-in 博多凱富", note: "正式入住。", map: "Comfort Hotel Hakata" }
+              ]
+            },
             { date: "01/04", week: "日", loc: "由布院", weather: "☁️ 5°C", items: [
                 { time: "08:40", type: "hotel", title: "飯店大廳集合", note: "由布院之森不等人，早點出發。", map: "" },
                 { time: "09:17", type: "transport", title: "由布院之森", note: "夢幻觀光列車。車上吃B-speak。", map: "博多駅", duration: "車程 2h 15m" },
@@ -335,14 +353,23 @@
                 { time: "18:30", type: "food", title: "牛腸鍋 大山 (KITTE)", note: "【晚餐】博多必吃味噌牛腸鍋。", map: "Hakata Motsunabe Oyama KITTE", link: "https://www.motu-ooyama.com/reserve/" },
                 { time: "20:30", type: "hotel", title: "返回飯店休息", note: "吃飽散步回飯店。", map: "Comfort Hotel Hakata" }
             ]},
-            { date: "01/05", week: "一", loc: "福岡", weather: "🌧️ 8°C", items: [
-                { time: "10:00", type: "shop", title: "天神地下街", note: "歐風地下街。買 SHIRO 香水、Ringo 蘋果派。", map: "Tenjin Underground Shopping Center", tags: ["SHIRO", "Heattech"] },
-                { time: "11:30", type: "shop", title: "Bic Camera 天神", note: "【電器】2號館貨全。帶護照退稅。", map: "Bic Camera Tenjin 2nd Block" },
-                { time: "13:00", type: "spot", title: "LaLaport 福岡", note: "【1:1鋼彈】整點表演。午餐美食街。", map: "LaLaport Fukuoka", duration: "計程車 20 分" },
-                { time: "16:00", type: "shop", title: "Yodobashi 博多", note: "最後補貨。飯店就在隔壁。", map: "Yodobashi Camera Hakata" },
-                { time: "19:00", type: "food", title: "和牛神樂 / 今半", note: "最後大餐：和牛壽喜燒。", map: "和牛すきやき 神楽", link: "https://kagura.org/reservation/" },
-                { time: "21:00", type: "hotel", title: "打包行李", note: "明天要回家了，戰利品塞好塞滿。", map: "Comfort Hotel Hakata" }
-            ]},
+            { date: "01/05", week: "一", loc: "福岡", weather: "🌧️ 8°C", isDualPlan: true,
+              planNames: { A: "方案 A：天神市區", B: "方案 B：Costco 郊區" },
+              planA: [ // 方案 A 天神
+                  { time: "10:00", type: "shop", title: "天神地下街", note: "買 SHIRO 香水、Ringo 蘋果派。連接大丸/Parco。", map: "Tenjin Underground Shopping Center", tags: ["SHIRO", "Heattech"] },
+                  { time: "12:30", type: "shop", title: "Bic Camera 天神", note: "【電器】2號館貨全。帶護照退稅。", map: "Bic Camera Tenjin 2nd Block" },
+                  { time: "15:00", type: "shop", title: "福岡 LaLaport", note: "搭計程車去。看 1:1 鋼彈。", map: "LaLaport Fukuoka" }
+              ],
+              planB: [ // 方案 B Costco
+                  { time: "10:00", type: "shop", title: "Torias 久山 (Costco)", note: "【搭計程車直達】好市多日本始祖店、Outlet。", map: "Costco Wholesale Hisayama", duration: "計程車 30 分" },
+                  { time: "13:00", type: "spot", title: "長崎 Bio Park 互動園", note: "Torias 園區內。可以摸水豚、餵動物。", map: "Torias Hisayama" },
+                  { time: "16:00", type: "shop", title: "Yodobashi 博多", note: "回程計程車直達博多站。", map: "Yodobashi Camera Hakata" }
+              ],
+              common: [
+                  { time: "19:00", type: "food", title: "和牛神樂 / 今半", note: "最後大餐：和牛壽喜燒。", map: "和牛すきやき 神楽", link: "https://kagura.org/reservation/" },
+                  { time: "21:00", type: "hotel", title: "打包行李", note: "明天要回家了，戰利品塞好塞滿。", map: "Comfort Hotel Hakata" }
+              ]
+            },
             { date: "01/06", week: "二", loc: "返程", weather: "✈️", items: [
                 { time: "07:45", type: "hotel", title: "退房 & 出發", note: "門口搭計程車直達。", map: "Comfort Hotel Hakata" },
                 { time: "08:00", type: "transport", title: "前往福岡機場", note: "計程車約 1,500 日圓。", map: "福岡空港国際線ターミナル", duration: "計程車 15 分" },
@@ -351,18 +378,18 @@
         ];
 
         let currentDayIdx = 0;
-        let day3Plan = 'A';
+        // 儲存每天的方案選擇 (預設都是 A)
+        let planSelections = { 2: 'A', 3: 'A', 5: 'A' }; // Index 2(Day3), 3(Day4), 5(Day6)
+        
         let localExpenses = [];
-        try {
-             localExpenses = JSON.parse(localStorage.getItem('myTripExpenses')) || [];
-        } catch(e) { console.log('LocalStorage error'); }
+        try { localExpenses = JSON.parse(localStorage.getItem('myTripExpenses')) || []; } catch(e) {}
         let exchangeRate = 0.22;
 
         function init() {
             renderDateScroll();
             renderItinerary(0);
             renderLocalExpenses();
-            fetchRate(); // 非阻塞
+            fetchRate();
         }
 
         async function fetchRate() {
@@ -386,11 +413,10 @@
                 </div>`).join('');
         }
 
-        window.togglePlan = function(plan) {
-            day3Plan = plan;
-            document.getElementById('btn-plan-A').className = plan === 'A' ? 'flex-1 py-2 rounded-md text-xs font-bold transition-all bg-orange-600 text-white shadow' : 'flex-1 py-2 rounded-md text-xs font-bold text-gray-500 transition-all';
-            document.getElementById('btn-plan-B').className = plan === 'B' ? 'flex-1 py-2 rounded-md text-xs font-bold transition-all bg-orange-600 text-white shadow' : 'flex-1 py-2 rounded-md text-xs font-bold text-gray-500 transition-all';
-            renderItinerary(2);
+        // 切換方案函數 (現在需要知道是切換哪一天的)
+        window.togglePlan = function(idx, plan) {
+            planSelections[idx] = plan;
+            renderItinerary(idx); // 重新渲染該天
         }
 
         function renderItinerary(idx) {
@@ -403,9 +429,32 @@
             document.getElementById('weather-desc').innerText = day.weather.includes('☀️') ? '晴朗' : '多雲/雨';
 
             let items = day.items;
+            
+            // 處理雙方案邏輯
             if (day.isDualPlan) {
                 switcher.classList.remove('hidden');
-                items = [...(day3Plan === 'A' ? day.planA : day.planB), ...day.common];
+                const currentPlan = planSelections[idx] || 'A';
+                
+                // 更新按鈕文字與狀態
+                const btnA = document.getElementById('btn-plan-A');
+                const btnB = document.getElementById('btn-plan-B');
+                
+                btnA.innerText = day.planNames.A;
+                btnB.innerText = day.planNames.B;
+                
+                // 綁定點擊事件 (使用 Closure 或 onclick 字串)
+                btnA.onclick = function() { togglePlan(idx, 'A'); };
+                btnB.onclick = function() { togglePlan(idx, 'B'); };
+
+                if (currentPlan === 'A') {
+                    btnA.className = 'flex-1 py-2 rounded-md text-xs font-bold transition-all bg-orange-600 text-white shadow';
+                    btnB.className = 'flex-1 py-2 rounded-md text-xs font-bold text-gray-500 transition-all';
+                    items = [...day.planA, ...day.common];
+                } else {
+                    btnA.className = 'flex-1 py-2 rounded-md text-xs font-bold text-gray-500 transition-all';
+                    btnB.className = 'flex-1 py-2 rounded-md text-xs font-bold transition-all bg-orange-600 text-white shadow';
+                    items = [...day.planB, ...day.common];
+                }
             } else {
                 switcher.classList.add('hidden');
             }
@@ -425,7 +474,6 @@
                     tagsHtml = '<div class="mt-1">' + item.tags.map(t => `<span class="tag-buy">#${t}</span>`).join('') + '</div>';
                 }
 
-                // AM/PM Logic
                 let apm = "";
                 if(item.time.match(/\d{2}:\d{2}/)) {
                     let hour = parseInt(item.time.split(':')[0]);
@@ -475,9 +523,7 @@
             const cost = parseInt(document.getElementById('expense-cost').value);
             if(!name || !cost) return;
             localExpenses.push({name, cost});
-            try {
-                localStorage.setItem('myTripExpenses', JSON.stringify(localExpenses));
-            } catch(e) {}
+            try { localStorage.setItem('myTripExpenses', JSON.stringify(localExpenses)); } catch(e) {}
             renderLocalExpenses();
             document.getElementById('expense-name').value = '';
             document.getElementById('expense-cost').value = '';
@@ -494,13 +540,10 @@
 
         window.removeExpense = function(i) {
             localExpenses.splice(i, 1);
-            try {
-                localStorage.setItem('myTripExpenses', JSON.stringify(localExpenses));
-            } catch(e) {}
+            try { localStorage.setItem('myTripExpenses', JSON.stringify(localExpenses)); } catch(e) {}
             renderLocalExpenses();
         }
 
-        // 啟動應用
         init();
     });
 </script>
